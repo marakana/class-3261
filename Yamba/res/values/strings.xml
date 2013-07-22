@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Yamba</string>
+    <string name="action_settings">Settings</string>
+    <string name="count">140</string>
+    <string name="statusStatus">Status</string>
+    <string name="statusHint">Waz zup?</string>
+    <string name="statusSubmit">Submit</string>
+    
+</resources>
