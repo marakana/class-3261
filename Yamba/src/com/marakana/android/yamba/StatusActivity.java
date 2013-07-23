@@ -1,17 +1,63 @@
 
 package com.marakana.android.yamba;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Activity;
+import android.content.Context;
 import android.content.res.Resources;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.marakana.android.yamba.clientlib.YambaClient;
+import com.marakana.android.yamba.clientlib.YambaClientException;
 
 public class StatusActivity extends Activity {
     private static final String TAG = "STATUS";
+
+    static class Poster extends AsyncTask<String, Void, Integer> {
+        private Context ctxt;
+
+        public Poster(Context ctxt) { this.ctxt = ctxt; }
+
+        @Override
+        protected Integer doInBackground(String... params) {
+
+            try {
+                new YambaClient(
+                        "student",
+                        "password",
+                        "http://yamba.marakana.com/api")
+                    .postStatus(params[0]);
+                return Integer.valueOf(R.string.statusSucceeded);
+            }
+            catch (YambaClientException e) {
+                Log.e(TAG, "Post failed: ", e);
+            }
+            return Integer.valueOf(R.string.statusFailed);
+        }
+
+        @Override
+        protected void onPostExecute(Integer result) {
+            done(result.intValue());
+        }
+
+        @Override
+        protected void onCancelled() { done(R.string.statusFailed); }
+
+        private void done(int msg) {
+            poster = null;
+            Toast.makeText(ctxt, msg, Toast.LENGTH_LONG) .show();
+        }
+    }
+
+    static Poster poster;
 
     private TextView count;
     private EditText status;
@@ -23,6 +69,7 @@ public class StatusActivity extends Activity {
     private int maxStatusLen;
     private int warnMax;
     private int errMax;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +87,12 @@ public class StatusActivity extends Activity {
         errMax = rez.getInteger(R.integer.err_max);
 
         setContentView(R.layout.activity_status);
+
+        findViewById(R.id.status_submit).setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) { post(); }
+                } );
 
         count = (TextView) findViewById(R.id.status_count);
         status = (EditText) findViewById(R.id.status_status);
@@ -69,7 +122,17 @@ public class StatusActivity extends Activity {
         count.setTextColor(c);
     }
 
+    void post() {
+        String msg = status.getText().toString();
+        if (TextUtils.isEmpty(msg)) { return; }
 
+        if (null != poster) { return; }
+
+        poster = new Poster(getApplicationContext());
+        poster.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, msg);
+
+        status.setText("");
+    }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) { }

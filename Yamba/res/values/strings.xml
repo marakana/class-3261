@@ -7,5 +7,7 @@
     <string name="statusStatus">Status</string>
     <string name="statusHint">Waz zup?</string>
     <string name="statusSubmit">Submit</string>
-    
+    <string name="statusSucceeded">Succeeded!</string>
+    <string name="statusFailed">Post failed!</string>
+
 </resources>

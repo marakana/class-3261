@@ -24,7 +24,8 @@
         android:layout_height="wrap_content"
         android:layout_gravity="right"
         android:text="@string/count"
-        android:textColor="@color/status_ok" />
+        android:textColor="@color/status_ok"
+        android:textStyle="bold" />
 
     <EditText
         android:id="@+id/status_status"
@@ -36,12 +37,14 @@
         android:hint="@string/statusHint" />
 
     <Button
+        android:id="@+id/status_submit"
         style="@style/yambaText.Medium"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_margin="@dimen/activity_vertical_margin"
-        android:background="@drawable/button_background"
         android:text="@string/statusSubmit" />
+
+<!--                 android:background="@drawable/button_background_down" -->
 
 </LinearLayout>
