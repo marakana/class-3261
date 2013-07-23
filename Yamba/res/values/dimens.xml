@@ -5,5 +5,6 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="textSizeMedium">24sp</dimen>
     <dimen name="textSizeLarge">32sp</dimen>
+    <dimen name="buttonPad">5dp</dimen>
     
 </resources>

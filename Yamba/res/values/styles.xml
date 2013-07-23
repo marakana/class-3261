@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
 
     <!--
         Base application theme, dependent on API level. This theme is replaced
@@ -25,9 +25,16 @@
     <style name="yambaText.Medium">
         <item name="android:textSize">@dimen/textSizeMedium</item>
     </style>
+
+    <style name="yambaButton" parent="yambaText.Medium">>
+        <item name="android:padding">@dimen/buttonPad</item>
+        <item name="android:background">@drawable/button_background</item>
+    </style>
     
     <style name="yambaText.Large">
         <item name="android:textSize">@dimen/textSizeLarge</item>
         <item name="android:textStyle">bold</item>
     </style>
+    
+    
 </resources>

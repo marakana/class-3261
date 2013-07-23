@@ -135,9 +135,6 @@ public class StatusActivity extends Activity {
     }
 
     @Override
-    protected void onSaveInstanceState(Bundle outState) { }
-
-    @Override
     protected void onPause() {
         Log.d(TAG, "onPause");
         super.onPause();
