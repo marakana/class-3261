@@ -9,7 +9,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.marakana.android.yamba.R;
-import com.marakana.android.yamba.clientlib.YambaClient;
+import com.marakana.android.yamba.YambaApplication;
 import com.marakana.android.yamba.clientlib.YambaClientException;
 
 
@@ -42,7 +42,6 @@ public class YambaService extends IntentService {
     }
 
 
-    private volatile YambaClient client;
     private volatile Hdlr hdlr;
 
     public YambaService() { super(TAG); }
@@ -52,22 +51,20 @@ public class YambaService extends IntentService {
         super.onCreate();
 
         hdlr = new Hdlr(this);
-
-        client = new YambaClient(
-                "student",
-                "password",
-                "http://yamba.marakana.com/api");
     }
 
     @Override
     protected void onHandleIntent(Intent intent) {
+        String status = intent.getStringExtra(PARAM_STATUS);
+        Log.d(TAG, "posting: " + status);
+
         int msg = R.string.statusFailed;
         try {
-            client.postStatus(intent.getStringExtra(PARAM_STATUS));
+            ((YambaApplication) getApplication()).getClient().postStatus(status);
             msg = R.string.statusSucceeded;
         }
         catch (YambaClientException e) {
-            Log.e(TAG, "Post failed: ", e);
+            Log.e(TAG, "Post failed: " + e, e);
         }
 
         Message.obtain(hdlr, OP_POST_COMPLETE, msg, 0).sendToTarget();

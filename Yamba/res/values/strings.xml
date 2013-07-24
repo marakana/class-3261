@@ -1,13 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <!-- App -->
     <string name="app_name">Yamba</string>
-    <string name="action_settings">Settings</string>
-    <string name="count">140</string>
+    
+    <!-- Status Activity -->
+    <string name="statusCount">140</string>
     <string name="statusStatus">Status</string>
-    <string name="statusHint">Waz zup?</string>
+    <string name="statusHint">zup?</string>
     <string name="statusSubmit">Submit</string>
     <string name="statusSucceeded">Succeeded!</string>
     <string name="statusFailed">Post failed!</string>
+
+    <!-- Preferences -->
+    <string name="menuPrefs">Prefs</string>
+    <string name="prefsHeader">Client Preferences</string>
+    <string name="prefsTitleUser">Account</string>
+    <string name="prefsKeyUser">PREFS.USER</string>
+    <string name="prefsTitlePassword">Password</string>
+    <string name="prefsKeyPass">PREFS.PASS</string>
+    <string name="prefsTitleURI">Endpoint</string>
+    <string name="prefsKeyURI">PREFS.URI</string>
 
 </resources>

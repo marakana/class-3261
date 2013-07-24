@@ -32,7 +32,7 @@
             android:layout_alignParentRight="true"
             android:layout_below="@id/status_label"
             android:layout_gravity="right"
-            android:text="@string/count"
+            android:text="@string/statusCount"
             android:textColor="@color/status_ok"
             android:textStyle="bold" />
 

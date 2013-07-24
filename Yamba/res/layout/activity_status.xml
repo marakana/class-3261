@@ -23,7 +23,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="right"
-        android:text="@string/count"
+        android:text="@string/statusCount"
         android:textColor="@color/status_ok"
         android:textStyle="bold" />
 
