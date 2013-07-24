@@ -34,10 +34,7 @@
 
         <receiver android:name=".svc.BootReceiver" >
             <intent-filter>
-                <action android:name="android.intent.action.ON_BOOT_COMPLETED" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="yamba.startPoller" />
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
     </application>

@@ -94,6 +94,12 @@ public class YambaService extends IntentService {
     }
 
     @Override
+    public void onDestroy() {
+        super.onDestroy();
+        dbHelper.close();
+    }
+
+    @Override
     protected void onHandleIntent(Intent intent) {
         int op = intent.getIntExtra(PARAM_OP, 0);
         switch(op) {
