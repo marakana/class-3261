@@ -9,6 +9,7 @@
         android:targetSdkVersion="17" />
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <application
         android:name=".YambaApplication"
@@ -30,6 +31,15 @@
             android:theme="@style/PrefsTheme" />
 
         <service android:name=".svc.YambaService" />
+
+        <receiver android:name=".svc.BootReceiver" >
+            <intent-filter>
+                <action android:name="android.intent.action.ON_BOOT_COMPLETED" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="yamba.startPoller" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>
