@@ -3,7 +3,8 @@
 
     <item
         android:id="@+id/menu_prefs"
-        android:title="@string/menuPrefs"
-        android:showAsAction="ifRoom"/>
+        android:icon="@android:drawable/ic_menu_preferences"
+        android:showAsAction="ifRoom|withText"
+        android:title="@string/menuPrefs"/>
 
 </menu>

@@ -25,9 +25,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".YambaPreferences"
+            android:theme="@style/PrefsTheme" />
 
-        <activity android:name=".YambaPreferences" />
-        
         <service android:name=".svc.YambaService" />
     </application>
 
