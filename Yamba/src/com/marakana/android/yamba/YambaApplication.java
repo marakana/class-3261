@@ -14,8 +14,6 @@ public class YambaApplication extends Application
 {
     private static final String TAG = "APP";
 
-    private static final String DEFAULT_URI = "http://yamba.marakana.com/api";
-
     private YambaClient client;
     private String userKey;
     private String pwdKey;
@@ -48,12 +46,15 @@ public class YambaApplication extends Application
         if (null == client) {
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
 
-            String usr = prefs.getString(userKey, "");
-            String pwd = prefs.getString(pwdKey, "");
-            String uri = prefs.getString(uriKey, DEFAULT_URI);
+            String usr = prefs.getString(userKey, null);
+            String pwd = prefs.getString(pwdKey, null);
+            String uri = prefs.getString(uriKey, null);
             Log.d(TAG, "new client: " + usr + "," + pwd  + "@" + uri);
 
-            client = new YambaClient(usr, pwd, uri);
+            try { client = new YambaClient(usr, pwd, uri); }
+            catch (Exception e) {
+                Log.e(TAG, "failed creating client: " + e, e);
+            }
         }
 
         return client;

@@ -8,6 +8,8 @@ import android.provider.BaseColumns;
 public final class YambaContract {
     private YambaContract() { }
 
+    public static final long VERSION = 1;
+
     public static final String AUTHORITY
          = "com.marakana.android.yamba";
 

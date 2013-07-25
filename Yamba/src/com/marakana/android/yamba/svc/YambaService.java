@@ -1,5 +1,6 @@
 package com.marakana.android.yamba.svc;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import android.app.AlarmManager;
@@ -9,7 +10,6 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
@@ -19,7 +19,6 @@ import com.marakana.android.yamba.R;
 import com.marakana.android.yamba.YambaApplication;
 import com.marakana.android.yamba.YambaContract;
 import com.marakana.android.yamba.clientlib.YambaClient.Status;
-import com.marakana.android.yamba.clientlib.YambaClientException;
 import com.marakana.android.yamba.data.YambaDBHelper;
 
 
@@ -82,7 +81,6 @@ public class YambaService extends IntentService {
 
     private volatile int maxPolls;
     private volatile Hdlr hdlr;
-    private volatile YambaDBHelper dbHelper;
 
     public YambaService() { super(TAG); }
 
@@ -91,13 +89,6 @@ public class YambaService extends IntentService {
         super.onCreate();
         maxPolls = getResources().getInteger(R.integer.poll_max);
         hdlr = new Hdlr(this);
-        dbHelper = new YambaDBHelper(this);
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        dbHelper.close();
     }
 
     @Override
@@ -123,7 +114,7 @@ public class YambaService extends IntentService {
             parseTimeline(
                 ((YambaApplication) getApplication()).getClient().getTimeline(maxPolls));
         }
-        catch (YambaClientException e) {
+        catch (Exception e) {
             Log.e(TAG, "Poll failed: " + e, e);
         }
     }
@@ -137,7 +128,7 @@ public class YambaService extends IntentService {
             ((YambaApplication) getApplication()).getClient().postStatus(status);
             msg = R.string.statusSucceeded;
         }
-        catch (YambaClientException e) {
+        catch (Exception e) {
             Log.e(TAG, "Post failed: " + e, e);
         }
 
@@ -145,27 +136,28 @@ public class YambaService extends IntentService {
     }
 
     private void parseTimeline(List<Status> timeline) {
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
-
-        long latest = getMaxTimestamp(db);
+        long latest = getMaxTimestamp();
+        List<ContentValues> vals = new ArrayList<ContentValues>();
         for (Status status: timeline) {
             long t = status.getCreatedAt().getTime();
             if (t <= latest) { continue; }
 
-            ContentValues vals = new ContentValues();
-            vals.put(YambaDBHelper.Column.ID, Long.valueOf(status.getId()));
-            vals.put(YambaDBHelper.Column.TIMESTAMP, Long.valueOf(t));
-            vals.put(YambaDBHelper.Column.USER, status.getUser());
-            vals.put(YambaDBHelper.Column.STATUS, status.getMessage());
+            ContentValues row = new ContentValues();
+            row.put(YambaDBHelper.Column.ID, Long.valueOf(status.getId()));
+            row.put(YambaDBHelper.Column.TIMESTAMP, Long.valueOf(t));
+            row.put(YambaDBHelper.Column.USER, status.getUser());
+            row.put(YambaDBHelper.Column.STATUS, status.getMessage());
 
-            Log.d(TAG, "Insert: " + vals);
-            getContentResolver().insert(YambaContract.Timeline.URI, vals);
+            Log.d(TAG, "Insert: " + row);
+            vals.add(row);
         }
+
+        getContentResolver().bulkInsert(
+                YambaContract.Timeline.URI,
+                vals.toArray(new ContentValues[vals.size()]));
     }
 
-
-
-    private long getMaxTimestamp(SQLiteDatabase db) {
+    private long getMaxTimestamp() {
         Cursor c = null;
         long mx = Long.MIN_VALUE;
         try {

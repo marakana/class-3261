@@ -28,14 +28,30 @@ public class YambaProvider extends ContentProvider {
     }
 
     @Override
-    public int bulkInsert(Uri arg0, ContentValues[] arg1) {
-        throw new UnsupportedOperationException("bulkInsert not supported");
+    public int bulkInsert(Uri uri, ContentValues[] rows) {
+        SQLiteDatabase sdb = getDb();
+        int count = 0;
+        try {
+            sdb.beginTransaction();
+
+            for (ContentValues row: rows) {
+                if (0 < sdb.insert(YambaDBHelper.TABLE, null, row)) {
+                    count++;
+                }
+            }
+
+            sdb.setTransactionSuccessful();
+        }
+        finally {
+            sdb.endTransaction();
+        }
+
+        return count;
     }
 
     @Override
     public Uri insert(Uri uri, ContentValues vals) {
-        long id = getDb().insert(YambaDBHelper.TABLE, null, vals);
-        return (0 <= id) ? null : uri.buildUpon().appendPath(String.valueOf(id)).build();
+        throw new UnsupportedOperationException("delete not supported");
     }
 
     @Override
