@@ -8,6 +8,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
+import android.os.Build;
 
 import com.marakana.android.yamba.YambaContract;
 
@@ -86,10 +87,10 @@ public class YambaProvider extends ContentProvider {
     public Cursor query(Uri uri, String[] proj, String sel, String[] selArgs, String sort) {
         long pk = -1;
         switch (MATCHER.match(uri)) {
-            case TIMELINE_DIR_TYPE:
-                break;
             case TIMELINE_ITEM_TYPE:
                 pk = ContentUris.parseId(uri);
+                break;
+            case TIMELINE_DIR_TYPE:
                 break;
 
             default:
@@ -97,14 +98,21 @@ public class YambaProvider extends ContentProvider {
         }
 
         SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
+
         qb.setTables(YambaDBHelper.TABLE);
 
         qb.setProjectionMap(TIMELINE_PROJ_MAP.getProjectionMap());
-        qb.setStrict(true);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+            qb.setStrict(true);
+        }
 
         if (0 < pk) { qb.appendWhere(YambaDBHelper.Column.ID + "=" + pk); }
 
-        return qb.query(getDb(), proj, sel, selArgs, null, null, sort);
+        Cursor c = qb.query(getDb(), proj, sel, selArgs, null, null, sort);
+
+        c.setNotificationUri(getContext().getContentResolver(), uri);
+
+        return c;
     }
 
     @Override
@@ -132,6 +140,10 @@ public class YambaProvider extends ContentProvider {
         }
         finally {
             sdb.endTransaction();
+        }
+
+        if (0 < count) {
+            getContext().getContentResolver().notifyChange(uri, null);
         }
 
         return count;

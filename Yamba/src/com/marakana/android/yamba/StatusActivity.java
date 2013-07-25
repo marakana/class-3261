@@ -43,6 +43,12 @@ public class StatusActivity extends Activity {
                 startActivity(new Intent(this, YambaPreferences.class));
                 break;
 
+            case R.id.menu_timeline:
+                Intent i = new Intent(this, TimelineActivity.class);
+                i.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                startActivity(i);
+                break;
+
             default:
                 return super.onOptionsItemSelected(item);
         }
