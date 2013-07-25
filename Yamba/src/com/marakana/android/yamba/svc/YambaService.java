@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import com.marakana.android.yamba.R;
 import com.marakana.android.yamba.YambaApplication;
+import com.marakana.android.yamba.YambaContract;
 import com.marakana.android.yamba.clientlib.YambaClient.Status;
 import com.marakana.android.yamba.clientlib.YambaClientException;
 import com.marakana.android.yamba.data.YambaDBHelper;
@@ -158,18 +159,20 @@ public class YambaService extends IntentService {
             vals.put(YambaDBHelper.Column.STATUS, status.getMessage());
 
             Log.d(TAG, "Insert: " + vals);
-            db.insert(YambaDBHelper.TABLE, null, vals);
+            getContentResolver().insert(YambaContract.Timeline.URI, vals);
         }
     }
+
+
 
     private long getMaxTimestamp(SQLiteDatabase db) {
         Cursor c = null;
         long mx = Long.MIN_VALUE;
         try {
-            c = db.query(
-                    YambaDBHelper.TABLE,
+            c = getContentResolver().query(
+                    YambaContract.Timeline.URI,
                     new String[] { "max(" + YambaDBHelper.Column.TIMESTAMP + ")" },
-                    null, null, null, null, null);
+                    null, null, null);
             if (c.moveToNext()) { mx = c.getLong(0); }
         }
         finally {
