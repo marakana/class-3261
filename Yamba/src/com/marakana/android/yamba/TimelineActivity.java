@@ -13,11 +13,14 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 
 public class TimelineActivity extends ListActivity implements LoaderCallbacks<Cursor> {
     private static final String TAG = "TIMELINE";
+
+    public static final String PARAM_DETAILS = "TimelineActivity.DETAILS";
 
     private static final int TIMELINE_LOADER = 666;
 
@@ -116,5 +119,16 @@ public class TimelineActivity extends ListActivity implements LoaderCallbacks<Cu
         setListAdapter(adapter);
 
         getLoaderManager().initLoader(TIMELINE_LOADER, null, this);
+    }
+
+    @Override
+    protected void onListItemClick(ListView l, View v, int p, long id) {
+        Intent i = new Intent(this, TimelineDetailActivity.class);
+        Cursor c = (Cursor) l.getItemAtPosition(p);
+        i.putExtra(
+                PARAM_DETAILS,
+                c.getString(c.getColumnIndex(YambaContract.Timeline.Column.STATUS)));
+
+        startActivity(i);
     }
 }

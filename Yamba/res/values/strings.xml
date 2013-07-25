@@ -6,7 +6,7 @@
 
     <!-- Timeline Activity -->
     <string name="menuTimeline">Timeline</string>
-    
+
     <!-- Status Activity -->
     <string name="statusCount">140</string>
     <string name="statusStatus">Status</string>
@@ -28,5 +28,6 @@
     <string name="title_activity_timeline">TimelineActivity</string>
     <string name="action_settings">Settings</string>
     <string name="hello_world">Hello world!</string>
+    <string name="title_activity_timeline_detail">TimelineDetail</string>
 
 </resources>
