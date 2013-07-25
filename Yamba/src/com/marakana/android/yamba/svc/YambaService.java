@@ -19,7 +19,6 @@ import com.marakana.android.yamba.R;
 import com.marakana.android.yamba.YambaApplication;
 import com.marakana.android.yamba.YambaContract;
 import com.marakana.android.yamba.clientlib.YambaClient.Status;
-import com.marakana.android.yamba.data.YambaDBHelper;
 
 
 public class YambaService extends IntentService {
@@ -143,10 +142,10 @@ public class YambaService extends IntentService {
             if (t <= latest) { continue; }
 
             ContentValues row = new ContentValues();
-            row.put(YambaDBHelper.Column.ID, Long.valueOf(status.getId()));
-            row.put(YambaDBHelper.Column.TIMESTAMP, Long.valueOf(t));
-            row.put(YambaDBHelper.Column.USER, status.getUser());
-            row.put(YambaDBHelper.Column.STATUS, status.getMessage());
+            row.put(YambaContract.Timeline.Column.ID, Long.valueOf(status.getId()));
+            row.put(YambaContract.Timeline.Column.TIMESTAMP, Long.valueOf(t));
+            row.put(YambaContract.Timeline.Column.USER, status.getUser());
+            row.put(YambaContract.Timeline.Column.STATUS, status.getMessage());
 
             Log.d(TAG, "Insert: " + row);
             vals.add(row);
@@ -163,7 +162,7 @@ public class YambaService extends IntentService {
         try {
             c = getContentResolver().query(
                     YambaContract.Timeline.URI,
-                    new String[] { "max(" + YambaDBHelper.Column.TIMESTAMP + ")" },
+                    new String[] { YambaContract.Timeline.Column.MAX_TIMESTAMP },
                     null, null, null);
             if (c.moveToNext()) { mx = c.getLong(0); }
         }

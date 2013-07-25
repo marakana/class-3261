@@ -1,14 +1,67 @@
 package com.marakana.android.yamba.data;
 
 import android.content.ContentProvider;
+import android.content.ContentUris;
 import android.content.ContentValues;
+import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
+
+import com.marakana.android.yamba.YambaContract;
 
 
 public class YambaProvider extends ContentProvider {
     private YambaDBHelper db;
+
+
+    //  scheme         authority               path
+    //                                         table/#
+    // content://com.marakana.android.yamba/timeline/7
+
+    private static final int TIMELINE_ITEM_TYPE = 1;
+    private static final int TIMELINE_DIR_TYPE = 2;
+    private static final UriMatcher MATCHER = new UriMatcher(UriMatcher.NO_MATCH);
+    static {
+        MATCHER.addURI(
+                YambaContract.AUTHORITY,
+                YambaContract.Timeline.TABLE + "/#",
+                TIMELINE_ITEM_TYPE);
+        MATCHER.addURI(
+                YambaContract.AUTHORITY,
+                YambaContract.Timeline.TABLE,
+                TIMELINE_DIR_TYPE);
+    }
+
+    private static final ColumnMap TIMELINE_COL_MAP = new ColumnMap.Builder()
+        .addColumn(
+                YambaContract.Timeline.Column.ID,
+                YambaDBHelper.Column.ID,
+                ColumnMap.Type.LONG)
+        .addColumn(
+                YambaContract.Timeline.Column.TIMESTAMP,
+                YambaDBHelper.Column.TIMESTAMP,
+                ColumnMap.Type.LONG)
+        .addColumn(
+                YambaContract.Timeline.Column.USER,
+                YambaDBHelper.Column.USER,
+                ColumnMap.Type.STRING)
+        .addColumn(
+                YambaContract.Timeline.Column.STATUS,
+                YambaDBHelper.Column.STATUS,
+                ColumnMap.Type.STRING)
+        .build();
+
+    private static final ProjectionMap TIMELINE_PROJ_MAP = new ProjectionMap.Builder()
+        .addColumn(YambaContract.Timeline.Column.ID, YambaDBHelper.Column.ID)
+        .addColumn(YambaContract.Timeline.Column.TIMESTAMP, YambaDBHelper.Column.TIMESTAMP)
+        .addColumn(YambaContract.Timeline.Column.USER, YambaDBHelper.Column.USER)
+        .addColumn(YambaContract.Timeline.Column.STATUS, YambaDBHelper.Column.STATUS)
+        .addColumn(
+                YambaContract.Timeline.Column.MAX_TIMESTAMP,
+                "max(" + YambaDBHelper.Column.TIMESTAMP + ")")
+        .build();
 
     @Override
     public boolean onCreate() {
@@ -17,24 +70,59 @@ public class YambaProvider extends ContentProvider {
     }
 
     @Override
-    public String getType(Uri arg0) {
-        throw new UnsupportedOperationException("getType not supported");
+    public String getType(Uri uri) {
+
+        switch (MATCHER.match(uri)) {
+            case TIMELINE_DIR_TYPE:
+                return YambaContract.Timeline.DIR_TYPE;
+            case TIMELINE_ITEM_TYPE:
+                return YambaContract.Timeline.ITEM_TYPE;
+            default:
+                throw new IllegalArgumentException("Unrecognized uri: " + uri);
+        }
     }
 
     @Override
     public Cursor query(Uri uri, String[] proj, String sel, String[] selArgs, String sort) {
-        return getDb()
-            .query(YambaDBHelper.TABLE, proj, sel, selArgs, null, null, sort);
+        long pk = -1;
+        switch (MATCHER.match(uri)) {
+            case TIMELINE_DIR_TYPE:
+                break;
+            case TIMELINE_ITEM_TYPE:
+                pk = ContentUris.parseId(uri);
+                break;
+
+            default:
+                throw new IllegalArgumentException("Unrecognized uri: " + uri);
+        }
+
+        SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
+        qb.setTables(YambaDBHelper.TABLE);
+
+        qb.setProjectionMap(TIMELINE_PROJ_MAP.getProjectionMap());
+        qb.setStrict(true);
+
+        if (0 < pk) { qb.appendWhere(YambaDBHelper.Column.ID + "=" + pk); }
+
+        return qb.query(getDb(), proj, sel, selArgs, null, null, sort);
     }
 
     @Override
     public int bulkInsert(Uri uri, ContentValues[] rows) {
+        switch (MATCHER.match(uri)) {
+            case TIMELINE_DIR_TYPE:
+                break;
+            default:
+                throw new IllegalArgumentException("Unrecognized uri: " + uri);
+        }
+
         SQLiteDatabase sdb = getDb();
         int count = 0;
         try {
             sdb.beginTransaction();
 
             for (ContentValues row: rows) {
+                row = TIMELINE_COL_MAP.translateCols(row);
                 if (0 < sdb.insert(YambaDBHelper.TABLE, null, row)) {
                     count++;
                 }
