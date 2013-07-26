@@ -24,8 +24,6 @@ import com.marakana.android.yamba.clientlib.YambaClient.Status;
 public class YambaService extends IntentService {
     private static final String TAG = "SVC";
 
-
-
     static final int OP_POST_COMPLETE = -1;
     private static final int OP_POST = -2;
     private static final int OP_POLL = -3;
@@ -58,6 +56,11 @@ public class YambaService extends IntentService {
                 System.currentTimeMillis() + 100,
                 t,
                 getPollingIntent(ctxt));
+    }
+
+    public static void stopPolling(Context ctxt) {
+        ((AlarmManager) ctxt.getSystemService(Context.ALARM_SERVICE))
+            .cancel(getPollingIntent(ctxt));
     }
 
     public static void post(Context ctxt, String msg) {
