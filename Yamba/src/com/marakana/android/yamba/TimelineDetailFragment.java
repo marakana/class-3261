@@ -3,7 +3,6 @@ package com.marakana.android.yamba;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.text.format.DateUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,12 +37,6 @@ public class TimelineDetailFragment extends Fragment {
         setDetails(getArguments());
 
         return details;
-    }
-
-    @Override
-    public void onSaveInstanceState(Bundle state) {
-        super.onSaveInstanceState(state);
-        Log.d("SAVE", "state: " + state);
     }
 
     public void setDetails(Bundle args) {

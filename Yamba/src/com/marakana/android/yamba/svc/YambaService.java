@@ -49,6 +49,7 @@ public class YambaService extends IntentService {
     }
 
     public static void startPolling(Context ctxt) {
+        Log.d(TAG, "Polling started");
         long t = 1000 * 60 * ctxt.getResources().getInteger(R.integer.poll_interval);
         ((AlarmManager) ctxt.getSystemService(Context.ALARM_SERVICE))
             .setInexactRepeating(
@@ -59,6 +60,7 @@ public class YambaService extends IntentService {
     }
 
     public static void stopPolling(Context ctxt) {
+        Log.d(TAG, "Polling stopped");
         ((AlarmManager) ctxt.getSystemService(Context.ALARM_SERVICE))
             .cancel(getPollingIntent(ctxt));
     }
@@ -89,8 +91,8 @@ public class YambaService extends IntentService {
     @Override
     public void onCreate() {
         super.onCreate();
-        maxPolls = getResources().getInteger(R.integer.poll_max);
         hdlr = new Hdlr(this);
+        maxPolls = getResources().getInteger(R.integer.poll_max);
     }
 
     @Override
@@ -104,14 +106,13 @@ public class YambaService extends IntentService {
                 doPoll();
                 break;
 
-                default:
-                    throw new IllegalArgumentException("Unrecognized op: " + op);
+            default:
+                throw new IllegalArgumentException("Unrecognized op: " + op);
         }
-
     }
 
     private void doPoll() {
-        Log.d(TAG, "polling");
+        Log.d(TAG, "poll");
         try {
             parseTimeline(
                 ((YambaApplication) getApplication()).getClient().getTimeline(maxPolls));
@@ -123,7 +124,7 @@ public class YambaService extends IntentService {
 
     private void doPost(Intent intent) {
         String status = intent.getStringExtra(PARAM_STATUS);
-        Log.d(TAG, "posting: " + status);
+        Log.d(TAG, "post: " + status);
 
         int msg = R.string.statusFailed;
         try {
@@ -166,7 +167,9 @@ public class YambaService extends IntentService {
             c = getContentResolver().query(
                     YambaContract.Timeline.URI,
                     new String[] { YambaContract.Timeline.Column.MAX_TIMESTAMP },
-                    null, null, null);
+                    null,
+                    null,
+                    null);
             if (c.moveToNext()) { mx = c.getLong(0); }
         }
         finally {

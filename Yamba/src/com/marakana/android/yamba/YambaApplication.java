@@ -49,7 +49,7 @@ public class YambaApplication extends Application
             String usr = prefs.getString(userKey, null);
             String pwd = prefs.getString(pwdKey, null);
             String uri = prefs.getString(uriKey, null);
-            Log.d(TAG, "new client: " + usr + "," + pwd  + "@" + uri);
+            Log.d(TAG, "new client: " + usr + "@" + uri);
 
             try { client = new YambaClient(usr, pwd, uri); }
             catch (Exception e) {

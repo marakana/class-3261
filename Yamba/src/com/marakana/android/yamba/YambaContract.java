@@ -23,8 +23,6 @@ public final class YambaContract {
 
         public static final String TABLE = "timeline";
 
-        // major/minor
-
         private static final String MINOR_TYPE = "/vnd." + AUTHORITY;
 
         public static final String ITEM_TYPE

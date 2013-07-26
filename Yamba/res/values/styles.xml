@@ -18,6 +18,11 @@
         <item name="android:windowBackground">@drawable/background</item>
     </style>
 
+    <style name="PrefsTheme" parent="AppTheme">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">@dimen/textSizeMedium</item>
+    </style>
+    
     <style name="yambaText" parent="android:Widget.Holo.Light.TextView">
         <item name="android:textColor">@color/white</item>
     </style>
@@ -39,11 +44,6 @@
     <style name="yambaButton" parent="yambaText.Medium">
         <item name="android:padding">@dimen/buttonPad</item>
         <item name="android:background">@drawable/button_background</item>
-    </style>
-
-    <style name="PrefsTheme" parent="AppTheme">
-        <item name="android:textColor">@color/white</item>
-        <item name="android:textSize">@dimen/textSizeMedium</item>
     </style>
 
 </resources>

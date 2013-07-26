@@ -20,7 +20,6 @@ public class YambaProvider extends ContentProvider {
     //  scheme         authority               path
     //                                         table/#
     // content://com.marakana.android.yamba/timeline/7
-
     private static final int TIMELINE_ITEM_TYPE = 1;
     private static final int TIMELINE_DIR_TYPE = 2;
     private static final UriMatcher MATCHER = new UriMatcher(UriMatcher.NO_MATCH);
