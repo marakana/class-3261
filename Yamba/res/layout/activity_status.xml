@@ -13,9 +13,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:text="@string/statusStatus"
-        android:textSize="@dimen/textSizeLarge"
-        android:textStyle="bold" />
+        android:text="@string/statusStatus" />
 
     <TextView
         android:id="@+id/status_count"
