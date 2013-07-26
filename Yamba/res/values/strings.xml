@@ -9,7 +9,9 @@
     <!-- Timeline Activity -->
     <string name="menuTimeline">Timeline</string>
     <string name="timeline_fragment">timeline_fragment</string>
-
+    <string name="timeline_write">Permission to write the Yamba Timeline</string>
+    <string name="timeline_read">Permission to read the Yamba Timeline</string>
+    
     <!-- Timeline Detail Activity -->
     <string name="title_activity_timeline_detail">TimelineDetail</string>
     <string name="timeline_detail_fragment">timeline_detail_fragment</string>
@@ -33,5 +35,5 @@
     <string name="prefsKeyPass">PREFS.PASS</string>
     <string name="prefsTitleURI">Endpoint</string>
     <string name="prefsKeyURI">PREFS.URI</string>
-
+    
 </resources>
