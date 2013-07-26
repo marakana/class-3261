@@ -1,4 +1,3 @@
-
 package com.marakana.android.yamba;
 
 import android.os.Bundle;
@@ -16,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
+
 
 public class TimelineFragment extends ListFragment implements LoaderCallbacks<Cursor> {
     private static final String TAG = "TIMELINE";
@@ -78,8 +78,6 @@ public class TimelineFragment extends ListFragment implements LoaderCallbacks<Cu
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup root, Bundle state) {
         View v = super.onCreateView(inflater, root,  state);
-
-        //View xv = inflater.inflate(R.layout.mylayout, root, false);
 
         SimpleCursorAdapter adapter = new SimpleCursorAdapter(
                 getActivity(),

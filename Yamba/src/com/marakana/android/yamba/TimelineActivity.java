@@ -1,7 +1,7 @@
-
 package com.marakana.android.yamba;
 
 import android.os.Bundle;
+
 
 public class TimelineActivity extends YambaActivity {
 
@@ -10,5 +10,4 @@ public class TimelineActivity extends YambaActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.timeline_activity);
     }
-
 }

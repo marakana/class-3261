@@ -6,12 +6,12 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context=".TimelineActivity" >
+    tools:context=".StatusActivity" >
 
     <fragment
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        class="com.marakana.android.yamba.TimelineFragment"
-        android:tag="@string/timeline_fragment" />
+        class="com.marakana.android.yamba.StatusFragment"
+        android:tag="@string/status_fragment" />
 
 </FrameLayout>

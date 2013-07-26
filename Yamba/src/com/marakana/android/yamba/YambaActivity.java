@@ -1,4 +1,3 @@
-
 package com.marakana.android.yamba;
 
 import android.app.Activity;
@@ -7,8 +6,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-public abstract class YambaActivity extends Activity {
 
+public abstract class YambaActivity extends Activity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -47,5 +46,4 @@ public abstract class YambaActivity extends Activity {
         i.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
         startActivity(i);
     }
-
 }
