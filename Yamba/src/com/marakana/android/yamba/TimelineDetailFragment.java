@@ -3,6 +3,7 @@ package com.marakana.android.yamba;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.text.format.DateUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +18,14 @@ public class TimelineDetailFragment extends Fragment {
         return frag;
     }
 
+    public static Bundle bundleDetails(long ts, String user, String status) {
+        Bundle args = new Bundle();
+        args.putLong(YambaContract.Timeline.Column.TIMESTAMP, ts);
+        args.putString(YambaContract.Timeline.Column.USER, user);
+        args.putString(YambaContract.Timeline.Column.STATUS, status);
+        return args;
+    }
+
 
     private View details;
 
@@ -24,21 +33,28 @@ public class TimelineDetailFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup root, Bundle state) {
         details = inflater.inflate(R.layout.timeline_detail_fragment, root, false);
 
-        if (null == state) { state = getArguments(); }
-        if (null != state) {
-            setDetails(
-                    state.getLong(YambaContract.Timeline.Column.TIMESTAMP),
-                    state.getString(YambaContract.Timeline.Column.USER),
-                    state.getString(YambaContract.Timeline.Column.STATUS));
-        }
+        // I'm not sure that this is necessary.
+        // Android should restore the the state, automatically, under some circs.
+        setDetails(getArguments());
 
         return details;
     }
 
-    public void setDetails(long ts, String user, String status) {
+    @Override
+    public void onSaveInstanceState(Bundle state) {
+        super.onSaveInstanceState(state);
+        Log.d("SAVE", "state: " + state);
+    }
+
+    public void setDetails(Bundle args) {
+        if ((null == args) || (null == details)) { return; }
+
         ((TextView) details.findViewById(R.id.timeline_detail_timestamp))
-            .setText(DateUtils.getRelativeTimeSpanString(ts));
-        ((TextView) details.findViewById(R.id.timeline_detail_user)).setText(user);
-        ((TextView) details.findViewById(R.id.timeline_detail_status)).setText(status);
+            .setText(DateUtils.getRelativeTimeSpanString(
+                    args.getLong(YambaContract.Timeline.Column.TIMESTAMP, 0L)));
+        ((TextView) details.findViewById(R.id.timeline_detail_user)).setText(
+                args.getString(YambaContract.Timeline.Column.USER));
+        ((TextView) details.findViewById(R.id.timeline_detail_status)).setText(
+                args.getString(YambaContract.Timeline.Column.STATUS));
     }
 }
